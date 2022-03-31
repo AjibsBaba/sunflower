@@ -43,7 +43,7 @@ class StartupBenchmarks {
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
-    fun startup() = startup(CompilationMode.None())
+    fun startupCompilationNone() = startup(CompilationMode.None())
 
     @Test
     fun startupCompilationPartial() = startup(CompilationMode.Partial())
@@ -54,10 +54,12 @@ class StartupBenchmarks {
     private fun startup(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = PACKAGE_NAME,
         metrics = listOf(StartupTimingMetric()),
-        iterations = 5,
+        iterations = 10,
         compilationMode = compilationMode,
         startupMode = StartupMode.COLD,
     ) {
         startActivityAndWait()
+        // TODO Can be removed when beta-06 is released. See b/226179160
+        Thread.sleep(500)
     }
 }
